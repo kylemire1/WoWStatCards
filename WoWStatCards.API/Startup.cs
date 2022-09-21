@@ -8,7 +8,7 @@ using WoWStatCards.API;
 public class Startup
 {
     private readonly IConfiguration _configuration;
-    private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+    private readonly string _myAllowSpecificOrigins = "CorsPolicy";
 
     public Startup(IConfiguration configuration)
     {
@@ -30,11 +30,11 @@ public class Startup
         services.AddSingleton<CharacterStatClient>();
         services.AddScoped<IStatCardRepository, StatCardRepository>();
         services.AddAutoMapper(typeof(MappingConfig));
-        services.AddCors(options =>
+        services.AddCors(opt =>
         {
-            options.AddPolicy(name: _myAllowSpecificOrigins, policy =>
+            opt.AddPolicy("CorsPolicy", policy =>
             {
-                policy.WithOrigins("http://localhost:3000");
+                policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
             });
         });
     }

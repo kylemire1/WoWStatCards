@@ -22,9 +22,9 @@ namespace WoWStatCards.API.Controllers
 
         // GET: api/<CharacterStatsController>
         [HttpGet]
-        public async Task<StatDto> Get(string characterName, string realm)
+        public async Task<StatDto> Get(string characterName, string realm, string clientId)
         {
-            var token = await _blizzAuthClient.RefreshLogin();
+            var token = await _blizzAuthClient.RefreshLogin(clientId);
             StatResponse statData = await _statClient.GetStats(characterName, realm, token);
             CharacterMediaResponse characterMediaData = await _statClient.GetCharacterMedia(characterName, realm, token);
             string avatarUrl = characterMediaData.Assets.FirstOrDefault(a => a.Key == "avatar").Value;

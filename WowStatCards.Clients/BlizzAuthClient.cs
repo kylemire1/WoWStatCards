@@ -19,11 +19,12 @@ namespace WowStatCards.Clients
             _client = new RestClient("https://us.battle.net/oauth/token");
         }
 
-        public async Task<string> RefreshLogin()
+        public async Task<string> RefreshLogin(string clientId)
         {
+            var encodedBasicAuthToken = Base64EncodeSecret(clientId);
             var request = new RestRequest("", Method.Post);
 
-            request.AddHeader("Authorization", "Basic " + _secret);
+            request.AddHeader("Authorization", "Basic " + encodedBasicAuthToken);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "client_credentials");
 
@@ -39,6 +40,13 @@ namespace WowStatCards.Clients
 
                 throw ex;
             }
+        }
+
+        private string Base64EncodeSecret(string clientId)
+        {
+            var basicAuthToken = clientId + ":" + _secret;
+            var basicAuthTokenBytes = System.Text.Encoding.UTF8.GetBytes(basicAuthToken);
+            return Convert.ToBase64String(basicAuthTokenBytes);
         }
     }
 }
