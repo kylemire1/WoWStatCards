@@ -37,6 +37,7 @@ public class Startup
                 policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
             });
         });
+        services.AddSwaggerDocument();
     }
     public void Configure(WebApplication app, IWebHostEnvironment env)
     {
@@ -45,11 +46,8 @@ public class Startup
         app.UseCors(_myAllowSpecificOrigins);
         app.UseEndpoints(x => x.MapControllers());
         // Configure the HTTP request pipeline.
-        if (env.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseOpenApi();
+        app.UseSwaggerUi3();
 
         app.UseHttpsRedirection();
 

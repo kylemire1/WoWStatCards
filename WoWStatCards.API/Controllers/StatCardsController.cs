@@ -41,13 +41,20 @@ namespace WoWStatCards.API.Controllers
         [HttpPost]
         public async Task<StatCardDto> Post([FromBody] StatCardDto statCardDto)
         {
-            var statCard = _mapper.Map<StatCard>(statCardDto);
-            statCard.UpdatedDate = DateTime.Now;
-            statCard.CreatedDate = DateTime.Now;
+            try
+            {
+                var statCard = _mapper.Map<StatCard>(statCardDto);
+                statCard.UpdatedDate = DateTime.Now;
+                statCard.CreatedDate = DateTime.Now;
 
-            await _dbStatCards.CreateAsync(statCard);
+                await _dbStatCards.CreateAsync(statCard);
 
-            return _mapper.Map<StatCardDto>(statCard);
+                return _mapper.Map<StatCardDto>(statCard);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // PUT api/<StatCardsController>/5
