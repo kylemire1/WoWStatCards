@@ -24,6 +24,11 @@ namespace WowStatCards.Clients
             return await GetAsync<CharacterMediaResponse>(token, GetMediaRequestUri(characterName, realm));
         }
 
+        public async Task<ProfileResponse> GetCharacterProfile(string characterName, string realm, string token)
+        {
+            return await GetAsync<ProfileResponse>(token, GetProfileRequestUri(characterName, realm));
+        }
+
         private async Task<T> GetAsync<T>(string token, string uri)
         {
             var request = new RestRequest(uri, Method.Get);
@@ -40,6 +45,10 @@ namespace WowStatCards.Clients
             {
                 throw;
             }
+        }
+        private string GetProfileRequestUri(string characterName, string realm)
+        {
+            return realm.ToLower() + "/" + characterName.ToLower() + "?namespace=profile-us&locale=en_US";
         }
 
         private string GetStatRequestUri(string characterName, string realm)

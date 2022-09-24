@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WowStatCards.Clients;
 using WowStatCards.Models;
+using WowStatCards.Models.Enum;
 using WowStatCards.Models.View;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,8 +28,10 @@ namespace WoWStatCards.API.Controllers
             var token = await _blizzAuthClient.RefreshLogin(clientId);
             StatResponse statData = await _statClient.GetStats(characterName, realm, token);
             CharacterMediaResponse characterMediaData = await _statClient.GetCharacterMedia(characterName, realm, token);
+            ProfileResponse characterProfile = await _statClient.GetCharacterProfile(characterName, realm, token);
             string avatarUrl = characterMediaData.Assets.FirstOrDefault(a => a.Key == "avatar").Value;
             string renderUrl = characterMediaData.Assets.FirstOrDefault(a => a.Key == "main-raw").Value;
+            FactionEnum factionId = characterProfile.faction.name == "Alliance" ? FactionEnum.Alliance : FactionEnum.Horde;
 
             var statDto = new StatDto
             {
@@ -55,9 +58,11 @@ namespace WoWStatCards.API.Controllers
                 SpellCrit = statData.spell_crit.value,
                 SpellPower = statData.spell_power,
                 Armor = statData.armor.Effective,
-                CharacterName = characterName,
+                AvgItemLevel = characterProfile.average_item_level,
+                CharacterName = characterProfile.name,
                 AvatarUrl = avatarUrl,
                 RenderUrl = renderUrl,
+                FactionId = factionId,
             };
 
             return statDto;
