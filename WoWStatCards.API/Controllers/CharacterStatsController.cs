@@ -63,6 +63,7 @@ namespace WoWStatCards.API.Controllers
                 AvatarUrl = avatarUrl,
                 RenderUrl = renderUrl,
                 FactionId = factionId,
+                Realm = characterProfile.realm.name
             };
 
             return statDto;

@@ -3,6 +3,7 @@
     public class CharacterStats
     {
         public string CharacterName { get; set; }
+        public string Realm { get; set; }
         public string? AvatarUrl { get; set; }
         public string? RenderUrl { get; set; }
         public int? Health { get; set; }
