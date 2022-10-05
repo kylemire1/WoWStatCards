@@ -7,6 +7,5 @@ namespace WowStatCards.Models.View
         public string AvatarUrl { get; set; }
         public string RenderUrl { get; set; }
         public FactionEnum FactionId { get; set; }
-        public int AvgItemLevel { get; set; }
     }
 }
