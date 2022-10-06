@@ -16,7 +16,6 @@ namespace WowStatCards.DataAccess.Repository
         {
             entity.UpdatedDate = DateTime.Now;
             _context.Update(entity);
-            await _context.SaveChangesAsync();
 
             return entity;
         }

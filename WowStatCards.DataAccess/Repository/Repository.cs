@@ -17,10 +17,9 @@ namespace WowStatCards.DataAccess.Repository
         public async Task CreateAsync(T entity)
         {
             await _context.AddAsync(entity);
-            await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = _dbSet;
 
@@ -47,7 +46,6 @@ namespace WowStatCards.DataAccess.Repository
         public async Task<T> RemoveAsync(T entity)
         {
             _context.Remove(entity);
-            await SaveAsync();
 
             return entity;
         }
