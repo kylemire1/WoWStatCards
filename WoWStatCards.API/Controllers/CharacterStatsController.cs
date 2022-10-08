@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WowStatCards.Clients;
 using WowStatCards.Models;
 using WowStatCards.Models.Enum;
 using WowStatCards.Models.View;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WoWStatCards.API.Controllers
 {
@@ -25,6 +24,7 @@ namespace WoWStatCards.API.Controllers
         }
 
         // GET: api/<CharacterStatsController>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<ApiResponse>> Get(string characterName, string realm, string clientId)
         {

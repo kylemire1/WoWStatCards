@@ -13,5 +13,8 @@ namespace WowStatCards.Models.Domain
         [ForeignKey("Faction")]
         public int FactionId { get; set; }
         public Faction Faction { get; set; }
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public User User { get; set; }
     }
 }

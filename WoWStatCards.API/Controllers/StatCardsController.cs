@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WowStatCards.DataAccess.Repository.IRepository;
 using WowStatCards.Models;
 using WowStatCards.Models.Domain;
 using WowStatCards.Models.DTO;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WoWStatCards.API.Controllers
 {
@@ -27,7 +26,7 @@ namespace WoWStatCards.API.Controllers
 
         // GET: api/<StatCardsController>
         [HttpGet]
-        public async Task<ActionResult<ApiResponse>> Get()
+        public async Task<ActionResult<ApiResponse>> GetAll()
         {
             try
             {
@@ -49,6 +48,7 @@ namespace WoWStatCards.API.Controllers
         }
 
         // GET api/<StatCardsController>/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiResponse>> Get(int id)
         {
@@ -88,7 +88,7 @@ namespace WoWStatCards.API.Controllers
 
         // POST api/<StatCardsController>
         [HttpPost]
-        public async Task<ActionResult<ApiResponse>> Post([FromBody] StatCardDto statCardDto)
+        public async Task<ActionResult<ApiResponse>> Create([FromBody] StatCardDto statCardDto)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace WoWStatCards.API.Controllers
 
         // PUT api/<StatCardsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse>> Put(int id, [FromBody] StatCardDto statCardDto)
+        public async Task<ActionResult<ApiResponse>> Update(int id, [FromBody] StatCardDto statCardDto)
         {
             if (statCardDto == null || id == 0)
             {
