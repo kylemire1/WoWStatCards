@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WowStatCards.Models.Domain;
 
 namespace WowStatCards.DataAccess
 {
-    public class DataContext : IdentityDbContext<User>
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {

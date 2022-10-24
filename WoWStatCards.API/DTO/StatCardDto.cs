@@ -9,6 +9,7 @@ namespace WowStatCards.Models.DTO
         public string CharacterName { get; set; }
         public string AvatarUrl { get; set; }
         public string RenderUrl { get; set; }
+        public string UserEmail { get; set; }
         public FactionEnum FactionId { get; set; }
     }
 }

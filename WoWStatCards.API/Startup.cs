@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using System.Text;
+using System.Security.Claims;
 using WowStatCards.Clients;
 using WowStatCards.DataAccess;
 using WowStatCards.DataAccess.Repository;
 using WowStatCards.DataAccess.Repository.IRepository;
-using WowStatCards.Models.Domain;
 using WoWStatCards.API;
-using WoWStatCards.API.Services;
 
 public class Startup
 {
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly string _tokenSecret;
     private readonly string _myAllowSpecificOrigins = "CorsPolicy";
 
-    public Startup(IConfiguration configuration)
+
+    public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
         _configuration = configuration;
+        _webHostEnvironment = webHostEnvironment;
         _tokenSecret = configuration["AppSettings:TokenSecret"];
     }
 
@@ -59,29 +59,29 @@ public class Startup
         services.AddSingleton<BlizzAuthClient>();
         services.AddSingleton<CharacterStatClient>();
         services.AddScoped<IStatCardRepository, StatCardRepository>();
-        services.AddScoped<TokenService>();
 
         services.AddAutoMapper(typeof(MappingConfig));
         services.AddCors(opt =>
         {
             opt.AddPolicy("CorsPolicy", policy =>
             {
-                policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+                policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000").AllowCredentials();
             });
         });
         services.AddSwaggerDocument();
-        services.AddIdentityCore<User>().AddEntityFrameworkStores<DataContext>().AddSignInManager<SignInManager<User>>();
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSecret));
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+        services.AddAuthentication(options =>
         {
-            opt.TokenValidationParameters = new TokenValidationParameters
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = _configuration["AppSettings:AuthAuthority"];
+            options.Audience = _configuration["AppSettings:AuthAudience"];
+            options.RequireHttpsMetadata = _webHostEnvironment.IsDevelopment();
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateIssuer = false,
-                ValidateAudience = false
+                NameClaimType = ClaimTypes.NameIdentifier
             };
         });
     }

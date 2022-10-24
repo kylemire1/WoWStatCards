@@ -8,13 +8,11 @@ namespace WowStatCards.Models.Domain
         [Key]
         public int Id { get; set; }
         public string CardName { get; set; }
+        public string UserEmail { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
         [ForeignKey("Faction")]
         public int FactionId { get; set; }
         public Faction Faction { get; set; }
-        [ForeignKey("User")]
-        public string UserId { get; set; }
-        public User User { get; set; }
     }
 }

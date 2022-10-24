@@ -99,6 +99,13 @@ namespace WoWStatCards.API.Controllers
                     return BadRequest(_response);
                 }
 
+                if (statCardDto.UserEmail == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.Unauthorized;
+                    return Unauthorized(_response);
+                }
+
                 var statCard = _mapper.Map<StatCard>(statCardDto);
 
                 await _dbStatCards.CreateAsync(statCard);
@@ -175,6 +182,7 @@ namespace WoWStatCards.API.Controllers
                 }
 
                 await _dbStatCards.RemoveAsync(statCard);
+                await _dbStatCards.SaveAsync();
                 _response.IsSuccess = true;
                 _response.StatusCode = HttpStatusCode.NoContent;
 
